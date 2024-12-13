@@ -11,6 +11,15 @@ const registerUser = async (firstname, lastname, email, password) => {
     return generateToken(payload);
 }
 
+const loginUser = async (email, password) => {
+    const user = await User.findOne({ email })
+    if(!user){throw new Error("Invalid Credentials")}
+    const isMatch = await user.isValidPassword(password)
+    if(!isMatch){throw new Error("Invalid Credentials")}
+    return generateToken(user)
+}
+
 module.exports = {
-    registerUser
+    registerUser,
+    loginUser
 }
