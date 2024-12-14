@@ -9,7 +9,7 @@ const getAllPost = async () => {
 }
 
 const getPost = async (id) => {
-    const post = await Post.find({ _id: id})
+    const post = await Post.find({ _id: id}).populate("author", "firstname lastname email")
     if(!post){
         throw new Error('Post not found!')
     };
