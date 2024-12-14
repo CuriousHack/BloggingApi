@@ -1,11 +1,12 @@
 const { required } = require('joi')
 const mongoose = require('mongoose')
 
-const schema = mongoose.Schema
+const Schema = mongoose.Schema
 
 
-const postSchema = new schema({
+const postSchema = new Schema({
     title: {
+        type: String,
         required: true,
         unique: true
 
