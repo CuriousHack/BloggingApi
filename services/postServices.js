@@ -1,6 +1,6 @@
 const Post = require("../models/postModel")
 
-const getAllPost = async ({ author_id, title, tags, sortBy, order, page, perPage}) => {
+const getAllPost = async ({ author_id, title, state, tags, sortBy, order, page, perPage}) => {
     const query = { }
     const sortOption = {};
     if(author_id){
@@ -8,6 +8,9 @@ const getAllPost = async ({ author_id, title, tags, sortBy, order, page, perPage
     };
     if(title){
         query.title = title
+    };
+    if(state){
+        query.state = state
     };
     if(tags){
         query.tags = tags
@@ -17,7 +20,6 @@ const getAllPost = async ({ author_id, title, tags, sortBy, order, page, perPage
         page: parseInt(page, 10),
         limit: parseInt(perPage, 10),
         sort: sortOption,
-        populate: { path: "author", select: "firstname lastname email" }, // Populate user details
       };
     const posts = await Post.paginate(query, options)
     if(!posts){
