@@ -1,7 +1,25 @@
 const Post = require("../models/postModel")
 
-const getAllPost = async () => {
-    const posts = await Post.find({}).populate("author", "firstname lastname email")
+const getAllPost = async ({ author_id, title, tags, sortBy, order, page, perPage}) => {
+    const query = { }
+    const sortOption = {};
+    if(author_id){
+        query.author = author_id
+    };
+    if(title){
+        query.title = title
+    };
+    if(tags){
+        query.tags = tags
+    };
+    sortOption[sortBy] = order === "desc" ? -1 : 1;
+    const options = {
+        page: parseInt(page, 10),
+        limit: parseInt(perPage, 10),
+        sort: sortOption,
+        populate: { path: "author", select: "firstname lastname email" }, // Populate user details
+      };
+    const posts = await Post.paginate(query, options)
     if(!posts){
         throw new Error('No post found')
     };
@@ -18,5 +36,6 @@ const getPost = async (id) => {
 
 module.exports = {
     getAllPost,
-    getPost
+    getPost,
+    createPost
 }
