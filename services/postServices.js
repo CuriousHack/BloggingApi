@@ -34,6 +34,23 @@ const getPost = async (id) => {
     return post
 }
 
+const createPost = async (title, description, tags, body, author) => {
+    const newPost = await Post.create({
+        title,
+        description, 
+        tags, 
+        body, 
+        author,
+        reading_time: "1 minute"
+    })
+    if(!newPost){
+        throw new Error('Unable to create post');
+
+    };
+    return newPost
+
+}
+
 module.exports = {
     getAllPost,
     getPost,
