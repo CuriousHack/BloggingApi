@@ -1,7 +1,9 @@
 const { getAllPost, getPost } = require('../services/postServices')
 const getPosts = async (req, res) => {
     try{
-        const posts = await getAllPost()
+        const { author_id, title, tags, sortBy = "created_at", order = "desc", page = 1, perPage = 20 } = req.query;
+
+        const posts = await getAllPost({ author_id, title, state, tags, page, perPage, sortBy, order })
         res.status(200).json({success: true, posts})
     }
     catch(err){
