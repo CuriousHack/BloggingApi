@@ -1,7 +1,8 @@
 const { getAllPost, getPost, createPost } = require('../services/postServices')
 const getUserPosts = async (req, res) => {
     try{
-        const posts = await getAllPost( { author: req.user.id })
+        const { state } = req.query
+        const posts = await getAllPost( { author: req.user.id, state })
         res.status(200).json({success: true, posts})
     }
     catch(err){
