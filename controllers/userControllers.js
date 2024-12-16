@@ -12,7 +12,8 @@ const getUserPosts = async (req, res) => {
 const getUserPost = async (req, res) => {
     try{
         const id = req.params.id
-        const post = await getPost({_id: id, author: req.user.id })
+        // console.log(req.user)
+        const post = await getPost(id, req.user)
         res.status(200).json({ success: true, post})
     }
     catch(err){

@@ -15,7 +15,8 @@ const getPosts = async (req, res) => {
 const getSinglePost = async (req, res) => {
     try{
         const id = req.params.id
-        const post = await getPost(id)
+        const user = req.user
+        const post = await getPost(id, user)
         res.status(200).json({ success: true, post})
     }
     catch(err){

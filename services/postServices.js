@@ -28,11 +28,28 @@ const getAllPost = async ({ author_id, title, state, tags, sortBy, order, page, 
     return posts
 }
 
-const getPost = async (id) => {
+const getPost = async (id, author) => {
+    // const author = author ?? null
     const post = await Post.find({ _id: id}).populate("author", "firstname lastname email")
     if(!post){
         throw new Error('Post not found!')
     };
+    //check if post is in draft state and authorize user 
+    if(post[0].state == 'draft'){
+        if(author){
+            //authorize the user
+        if(post[0].author._id.toString() !== author.id){
+            throw new Error('Unauthorized')
+        }
+        else{
+            return post
+        }
+        }
+        else{
+            throw new Error('Unauthorized')
+        }
+        
+    }
     return post
 }
 
