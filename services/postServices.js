@@ -29,7 +29,6 @@ const getAllPost = async ({ author_id, title, state, tags, sortBy, order, page, 
 }
 
 const getPost = async (id, author) => {
-    // const author = author ?? null
     const post = await Post.find({ _id: id}).populate("author", "firstname lastname email")
     if(!post){
         throw new Error('Post not found!')
@@ -48,9 +47,20 @@ const getPost = async (id, author) => {
         else{
             throw new Error('Unauthorized')
         }
-        
     }
-    return post
+    //update post read count if request is not from it's author
+    try{
+        if(!author || (post[0].author._id.toString() !== author.id)){
+            //update the read count and return the post
+            await Post.findOneAndUpdate({_id: id}, {$inc: {read_count: 1}}, {new: true})
+            return post
+        }
+        //return post for author without updating the read count
+        return post
+    }
+    catch(err){
+        throw new Error(err.message)
+    }
 }
 
 const createPost = async (title, description, tags, body, author) => {
