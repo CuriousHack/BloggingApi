@@ -1,3 +1,4 @@
+const { timeCalculator } = require('../utils/helpers')
 const Post = require("../models/postModel")
 
 const getAllPost = async ({ author_id, title, state, tags, sortBy, order, page, perPage}) => {
@@ -64,13 +65,14 @@ const getPost = async (id, author) => {
 }
 
 const createPost = async (title, description, tags, body, author) => {
+    const read_time = timeCalculator(body)
     const newPost = await Post.create({
         title,
         description, 
         tags, 
         body, 
         author,
-        reading_time: "1 minute"
+        reading_time: read_time
     })
     if(!newPost){
         throw new Error('Unable to create post');
