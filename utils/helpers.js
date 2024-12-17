@@ -1,6 +1,4 @@
-//helper function goes here
-//read time algorithm comes first
-
+//make time readable for human
 const humanizeTime = (time) => {
     if(time < 0.5){
         return "less than a minute"
@@ -10,21 +8,19 @@ const humanizeTime = (time) => {
     }
     return `${Math.ceil(time)} minutes`
 }
-
+// count Number of words in the article body
 const noOfWords = (words) => {
     counts = words.trim().split(/\s+/)
     return counts.filter(count => count.length > 0).length
 
 }
-
-const timeCalculator = (words) => {
+//calculate read time based on the number of words in the article and the base wordPerMinute(200 WPM)
+const readTime = (words) => {
     const WPM = process.env.WORD_PER_MINUTE
     time = noOfWords(words)/WPM
-    // return noOfWords(words)
     return humanizeTime(time)
 }
 
 module.exports = {
-    humanizeTime,
-    timeCalculator
+    readTime
 }
