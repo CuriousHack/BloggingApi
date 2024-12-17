@@ -80,8 +80,27 @@ const createPost = async (title, description, tags, body, author) => {
 
 }
 
+const deletePost = async (id, author) => {
+    try{
+        const post = await Post.findById(id)
+        if(!post){
+            throw new Error("Post Not Found")
+        }
+        if(post.author !== author.id){
+            throw new Error("Sorry, you are not allowed to delete this post")
+
+        }
+        await Post.findByIdAndDelete(id)
+        return true
+    }
+    catch(err){
+        throw new Error(err.message)
+    }
+}
+
 module.exports = {
     getAllPost,
     getPost,
-    createPost
+    createPost,
+    deletePost
 }
