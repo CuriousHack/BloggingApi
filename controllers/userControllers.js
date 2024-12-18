@@ -1,4 +1,4 @@
-const { getAllPost, getPost, createPost, deletePost } = require('../services/postServices')
+const { getAllPost, getPost, createPost, deletePost, updatePost } = require('../services/postServices')
 const getUserPosts = async (req, res) => {
     try{
         const { state } = req.query
@@ -35,6 +35,17 @@ const createUserPost = async (req, res) => {
 }
 
 const updatePostById = async (req, res) => {
+    const author = req.user
+    const id = req.params.id
+    const {body, tags, description, state, title } = req.body
+
+    try{
+        const update = await updatePost({ id, author, title, state, tags, description, body} )
+        res.status(200).json({success: true, update})
+    }
+    catch(err){
+        res.status(400).json({ success: false, message: err.message})
+    }
 
 }
 

@@ -99,9 +99,37 @@ const deletePost = async (id, author) => {
     }
 }
 
+const updatePost = async ({id, author, title, state, tags, description, body}) => {
+    try{
+        const query = {}
+        if(title) query.title = title;
+        if(state) query.state = state;
+        if(tags) query.tags = tags;
+        if(description) query.description = description;
+        if(body) query.body = body;
+        query.updated_at = Date.now()
+        
+        const post = await Post.findById(id)
+        if(!post){
+            throw new Error("Post Not Found")
+        }
+        if(post.author !== author.id){
+            throw new Error("Unauthorized")
+
+        }
+        //perform update here
+        updatedPost = await Post.findByIdAndUpdate(id, query, {new: true})
+        return updatedPost
+    }
+    catch(err){
+        throw new Error(err.message)
+    }
+}
+
 module.exports = {
     getAllPost,
     getPost,
     createPost,
-    deletePost
+    deletePost,
+    updatePost
 }
