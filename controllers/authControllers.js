@@ -7,7 +7,7 @@ const register = async (req, res) => {
       const token = await authServices.registerUser(firstname, lastname, email, password);
       res.status(201).json({ success: true, token });
     } catch (err) {
-      res.status(400).json({ success: false, message: err.message });
+      res.status(err.statusCode).json({ success: false, message: err.message });
     }
   };
 
@@ -18,7 +18,7 @@ const login = async (req, res) => {
     token = await authServices.loginUser(email, password);
     res.status(200).json({ success: true, token })
   } catch (err) {
-    res.status(400).json({ success: false, message: err.message})
+    res.status(err.statusCode).json({ success: false, message: err.message})
   }
 }
 

@@ -6,19 +6,18 @@ const getUserPosts = async (req, res) => {
         res.status(200).json({success: true, posts})
     }
     catch(err){
-        res.status(500).json({ success: false, message: err.message })
+        res.status(err.statusCode).json({ success: false, message: err.message })
     }
 }
 
 const getUserPost = async (req, res) => {
     try{
         const id = req.params.id
-        // console.log(req.user)
         const post = await getPost(id, req.user)
         res.status(200).json({ success: true, post})
     }
     catch(err){
-        res.status(404).json({ success: false, message: err.message})
+        res.status(err.statusCode).json({ success: false, message: err.message})
     }
 }
 
@@ -30,7 +29,7 @@ const createUserPost = async (req, res) => {
         res.status(201).json({ success: true, post})
     }
     catch(err){
-        res.status(400).json({success: false, message: err.message})
+        res.status(err.statusCode).json({success: false, message: err.message})
     }
 }
 
@@ -44,7 +43,7 @@ const updatePostById = async (req, res) => {
         res.status(200).json({success: true, update})
     }
     catch(err){
-        res.status(400).json({ success: false, message: err.message})
+        res.status(err.statusCode).json({ success: false, message: err.message})
     }
 
 }
@@ -59,7 +58,7 @@ const deletePostById = async (req, res) => {
         res.status(200).json({success: true, deleted})
     }
     catch(err){
-        res.status(404).json({ success:false, message: err.message })
+        res.status(err.statusCode).json({ success:false, message: err.message })
     }
 }
 

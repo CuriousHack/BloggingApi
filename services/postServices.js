@@ -1,4 +1,9 @@
 const { readTime } = require('../utils/helpers')
+const { error } = require('../utils/helpers')
+const mongoose = require('mongoose');
+const { ObjectId } = mongoose.Types;
+
+
 const Post = require("../models/postModel")
 
 const getAllPost = async ({ author_id, title, state, tags, sortBy, order, page, perPage}) => {
@@ -24,43 +29,47 @@ const getAllPost = async ({ author_id, title, state, tags, sortBy, order, page, 
       };
     const posts = await Post.paginate(query, options)
     if(!posts){
-        throw new Error('No post found')
+        error(404, 'Post Not Found!')
     };
     return posts
 }
 
 const getPost = async (id, author) => {
+    if (!ObjectId.isValid(id)) {
+        error(400, 'Invalid request')
+    }
     const post = await Post.find({ _id: id}).populate("author", "firstname lastname email")
     if(!post){
-        throw new Error('Post not found!')
+        error(404, 'Post not found!')
     };
     //check if post is in draft state and authorize user 
     if(post[0].state == 'draft'){
         if(author){
             //authorize the user
         if(post[0].author._id.toString() !== author.id){
-            throw new Error('Unauthorized')
+            // throw new Error('Unauthorized')
+            error(403, 'Unauthorized!')
         }
         else{
             return post
         }
         }
         else{
-            throw new Error('Unauthorized')
+            error(403, 'Unauthorized!')
         }
     }
     //update post read count if request is not from it's author
     try{
         if(!author || (post[0].author._id.toString() !== author.id)){
             //update the read count and return the post
-            await Post.findOneAndUpdate({_id: id}, {$inc: {read_count: 1}}, {new: true})
-            return post
+            const newPost = await Post.findOneAndUpdate({_id: id}, {$inc: {read_count: 1}}, {new: true}).populate("author", "firstname lastname email")
+            return newPost
         }
         //return post for author without updating the read count
         return post
     }
     catch(err){
-        throw new Error(err.message)
+        error(500, 'Internal Server Error')
     }
 }
 
@@ -74,7 +83,7 @@ const createPost = async (title, description, tags, body, author) => {
         reading_time: readTime(body)
     })
     if(!newPost){
-        throw new Error('Unable to create post');
+        error(500, 'Internal Server Error!')
 
     };
     return newPost
@@ -85,17 +94,17 @@ const deletePost = async (id, author) => {
     try{
         const post = await Post.findById(id)
         if(!post){
-            throw new Error("Post Not Found")
+            error(404, 'Post Not Found!')
         }
         if(post.author !== author.id){
-            throw new Error("Sorry, you are not allowed to delete this post")
+            error(403, 'Unauthorized!')
 
         }
         await Post.findByIdAndDelete(id)
         return true
     }
     catch(err){
-        throw new Error(err.message)
+        error(500, 'Internal Server Error')
     }
 }
 
@@ -108,13 +117,13 @@ const updatePost = async ({id, author, title, state, tags, description, body}) =
         if(description) query.description = description;
         if(body) query.body = body;
         query.updated_at = Date.now()
-        
+
         const post = await Post.findById(id)
         if(!post){
-            throw new Error("Post Not Found")
+            error(404, 'Post Not Found')
         }
         if(post.author !== author.id){
-            throw new Error("Unauthorized")
+            error(403, 'Unauthorized')
 
         }
         //perform update here
@@ -122,7 +131,7 @@ const updatePost = async ({id, author, title, state, tags, description, body}) =
         return updatedPost
     }
     catch(err){
-        throw new Error(err.message)
+        error(500, 'Internal Server Error!')
     }
 }
 

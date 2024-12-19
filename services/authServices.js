@@ -1,9 +1,10 @@
 const User = require('../models/userModel')
 const { generateToken } = require('../utils/jwt')
+const { error } = require('../utils/helpers')
 
 const registerUser = async (firstname, lastname, email, password) => {
     const userExists = await User.findOne({ email });
-    if (userExists) throw new Error("User already exists");
+    if (userExists) error(409, 'User already exists');
 
     const newUser = new User({ firstname, lastname, email, password });
     const payload = ({firstname, lastname, email});
@@ -13,9 +14,9 @@ const registerUser = async (firstname, lastname, email, password) => {
 
 const loginUser = async (email, password) => {
     const user = await User.findOne({ email })
-    if(!user){throw new Error("Invalid Credentials")}
+    if(!user){error(401, 'Invalid Credentials')}
     const isMatch = await user.isValidPassword(password)
-    if(!isMatch){throw new Error("Invalid Credentials")}
+    if(!isMatch){ error(401, 'Invalid Credentials')}
     return generateToken(user)
 }
 

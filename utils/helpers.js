@@ -21,6 +21,14 @@ const readTime = (words) => {
     return humanizeTime(time)
 }
 
+const error = (code, message) => {
+    const error = new Error(message)
+    error.statusCode = code
+    throw error
+    // console.log(error)
+}
+
 module.exports = {
-    readTime
+    readTime,
+    error
 }
