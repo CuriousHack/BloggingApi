@@ -5,7 +5,6 @@ const validateRequest = (schema) => (req, res, next) => {
       const errors = error.details.map((detail) => detail.message);
       return res.status(400).json({ success: false, errors });
     }
-  
     next();
   };
   

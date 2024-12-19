@@ -1,4 +1,3 @@
-// const { required } = require('joi')
 const mongoose = require('mongoose')
 const mongoosePaginate = require('mongoose-paginate-v2')
 
@@ -52,7 +51,6 @@ const postSchema = new Schema({
 })
 
 postSchema.plugin(mongoosePaginate)
-
 const postModel = mongoose.model('posts', postSchema)
 
 module.exports = postModel

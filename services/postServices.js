@@ -47,7 +47,6 @@ const getPost = async (id, author) => {
         if(author){
             //authorize the user
         if(post[0].author._id.toString() !== author.id){
-            // throw new Error('Unauthorized')
             error(403, 'Unauthorized!')
         }
         else{

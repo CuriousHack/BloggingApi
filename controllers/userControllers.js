@@ -45,15 +45,12 @@ const updatePostById = async (req, res) => {
     catch(err){
         res.status(err.statusCode).json({ success: false, message: err.message})
     }
-
 }
 
 const deletePostById = async (req, res) => {
     const author = req.user
     const id = req.params.id
     try{
-        
-
         const deleted = await deletePost(id, author)
         res.status(200).json({success: true, deleted})
     }
