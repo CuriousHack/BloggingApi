@@ -49,7 +49,8 @@ Navigate to the project directory:
 
 ![image](https://github.com/user-attachments/assets/f27499eb-91f5-4d5c-ab00-81711d97aa6a)
 
-* Postman documentation for all endpoints along with their various examples(Successful and Failed request and responses) can be found [here](https://documenter.getpostman.com/view/27523942/2sAYJ3DLf9)
+* Postman documentation for all endpoints along with their various examples(Successful and Failed request and responses) can be found
+<a href="https://documenter.getpostman.com/view/27523942/2sAYJ3DLf9" target="_blank">Here</a>
 
 ### Technologies Used
 
