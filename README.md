@@ -17,12 +17,12 @@ what they've created.
 ### Installation Guide
 
 ```bash
-git clone https://github.com/curioushack/blogging-api
+git clone https://github.com/curioushack/BloggingApi
 ```
 
 Navigate to the project directory:
 ```bash
-    cd blogging-API
+    cd BloggingApi
 ```
 * Run `npm install` to install all dependencies
 * You can either work with the default `MongoDB` database or use your locally installed `MongoDB`. Do configure to your choice in the application entry file.
